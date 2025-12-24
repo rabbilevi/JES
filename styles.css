@@ -4,12 +4,15 @@
 }
 
 * { box-sizing: border-box; }
+
 body {
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: #111;
   background: #f6f7f9;
 }
+
+/* ===== Top bar + layout ===== */
 
 .topbar {
   padding: 14px 18px;
@@ -20,8 +23,16 @@ body {
   align-items: center;
   justify-content: space-between;
 }
-.topbar h1 { margin: 0; font-size: 18px; }
-.topbar-actions { display: flex; gap: 8px; }
+
+.topbar h1 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 8px;
+}
 
 .layout {
   display: grid;
@@ -42,14 +53,56 @@ body {
   justify-content: center;
 }
 
+/* ===== Receipt page ===== */
+
 .receipt-page {
   width: 8.5in;
   min-height: 11in;
   background: #fff;
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 0.6in;
+
+  /* IMPORTANT: lets header/footer absolute-position inside preview */
+  position: relative;
+
+  /* Content padding (must leave space for header/footer images) */
+  /* Adjust these two to match your header/footer image heights */
+  padding: 1.6in 0.6in 1.3in;
+
+  overflow: hidden;
 }
+
+/* ===== Header/footer images =====
+   Preview: absolute inside receipt-page
+   Print: fixed to each printed page (see @media print)
+*/
+
+.print-header,
+.print-footer {
+  position: absolute; /* preview behavior */
+  left: 0;
+  right: 0;
+  z-index: 5;
+}
+
+.print-header { top: 0; }
+.print-footer { bottom: 0; }
+
+/* Center + constrain to the same inner width as content.
+   8.5in page width - (0.6in left + 0.6in right padding) = 7.3in */
+.print-inner {
+  max-width: calc(8.5in - 1.2in);
+  margin: 0 auto;
+}
+
+.print-header img,
+.print-footer img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ===== Optional: if you still use the old text-based letterhead, keep these ===== */
 
 .letterhead {
   display: flex;
@@ -59,14 +112,39 @@ body {
   border-bottom: 2px solid #000;
   margin-bottom: 18px;
 }
-.org-name { font-weight: 800; font-size: 18px; }
-.org-meta { color: var(--muted); font-size: 12px; }
-.org-ein { font-size: 12px; color: var(--muted); }
 
-.receipt-body p { line-height: 1.45; }
-.receipt-date { margin-bottom: 10px; }
-.to-block { margin: 14px 0; }
-.donor-line { font-weight: 600; }
+.org-name {
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.org-meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.org-ein {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ===== Receipt body ===== */
+
+.receipt-body p {
+  line-height: 1.45;
+}
+
+.receipt-date {
+  margin-bottom: 10px;
+}
+
+.to-block {
+  margin: 14px 0;
+}
+
+.donor-line {
+  font-weight: 600;
+}
 
 .donations-table {
   width: 100%;
@@ -74,30 +152,58 @@ body {
   margin: 14px 0 10px;
   font-size: 12px;
 }
-.donations-table th, .donations-table td {
+
+.donations-table th,
+.donations-table td {
   border: 1px solid var(--border);
   padding: 8px;
   vertical-align: top;
 }
-.donations-table th { text-align: left; }
 
-.total-line { margin-top: 10px; }
+.donations-table th {
+  text-align: left;
+}
 
-.fineprint { color: #333; font-size: 12px; }
-.signature { margin-top: 22px; }
+.total-line {
+  margin-top: 10px;
+}
+
+.fineprint {
+  color: #333;
+  font-size: 12px;
+}
+
+.signature {
+  margin-top: 22px;
+}
+
+.sig-name {
+  font-weight: 700;
+}
+
+/* ===== Form controls ===== */
 
 .form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-.form label { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #222; }
+
+.form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: #222;
+}
+
 .form input {
   padding: 10px;
   border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 14px;
 }
+
 .form button {
   grid-column: 1 / -1;
   padding: 10px 12px;
@@ -108,14 +214,22 @@ body {
   cursor: pointer;
 }
 
-.row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
-.row input, .row select {
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.row input,
+.row select {
   width: 100%;
   padding: 10px;
   border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 14px;
 }
+
 button {
   padding: 10px 12px;
   border-radius: 8px;
@@ -123,69 +237,91 @@ button {
   background: #fff;
   cursor: pointer;
 }
-button.primary { background: #0b57d0; color: #fff; border-color: #0b57d0; }
-button.danger { color: #b00020; }
-.muted { color: var(--muted); font-size: 12px; }
-.status { background: #f1f3f5; border: 1px solid var(--border); border-radius: 8px; padding: 10px; font-size: 12px; }
 
-.tabs { display: flex; gap: 8px; margin-bottom: 10px; }
-.tab { padding: 8px 10px; border-radius: 999px; }
-.tab.active { background: #111; color: #fff; border-color: #111; }
-.tabpane.hidden { display: none; }
+button.primary {
+  background: #0b57d0;
+  color: #fff;
+  border-color: #0b57d0;
+}
 
-/* PRINT */
+button.danger {
+  color: #b00020;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.status {
+  background: #f1f3f5;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.tab {
+  padding: 8px 10px;
+  border-radius: 999px;
+}
+
+.tab.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.tabpane.hidden {
+  display: none;
+}
+
+/* ===== Print styles ===== */
+
 @media print {
   body { background: #fff; }
-  .no-print, .panel, .topbar { display: none !important; }
-  .layout { display: block; padding: 0; }
+
+  .no-print,
+  .panel,
+  .topbar {
+    display: none !important;
+  }
+
+  .layout {
+    display: block;
+    padding: 0;
+  }
+
   .receipt-page {
     border: none;
     border-radius: 0;
     width: auto;
     min-height: auto;
-    padding: 0.5in;
+    overflow: visible;
+
+    /* Keep the same padding-top/bottom so content clears header/footer */
+    padding: 1.6in 0.6in 1.3in;
   }
-  /* Avoid splitting table rows */
-  tr, td, th { page-break-inside: avoid; }
-}
-/* ===== PRINT HEADER / FOOTER IMAGES ===== */
 
-.print-header,
-.print-footer {
-  position: fixed;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 5;
-}
+  /* Print: repeat header/footer on every page */
+  .print-header,
+  .print-footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+  }
 
-.print-header {
-  top: 0;
-}
+  .print-header { top: 0; }
+  .print-footer { bottom: 0; }
 
-.print-footer {
-  bottom: 0;
-}
-
-.print-header img,
-.print-footer img {
-  width: 100%;
-  display: block;
-}
-
-/* Reserve space so content doesn't overlap */
-.receipt-page {
-  padding-top: 1.6in;   /* adjust to match header image height */
-  padding-bottom: 1.3in;/* adjust to match footer image height */
-}
-/* Constrain header/footer to content width */
-.print-inner {
-  max-width: calc(8.5in - 1.2in); /* page width minus left+right padding */
-  margin: 0 auto;
-}
-
-.print-header img,
-.print-footer img {
-  width: 100%;
-  height: auto;
+  /* Avoid splitting table rows across pages */
+  tr, td, th {
+    page-break-inside: avoid;
+  }
 }
