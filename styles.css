@@ -287,3 +287,12 @@ button.danger { color: #b00020; }
   /* Avoid splitting table rows across pages */
   tr, td, th { page-break-inside: avoid; }
 }
+.to-line {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+}
+
+.to-label {
+  font-weight: 600;
+}
