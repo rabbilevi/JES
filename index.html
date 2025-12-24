@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Donation Receipt Generator (No Server)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="no-print topbar">
+    <h1>Donation Receipt Generator</h1>
+    <div class="topbar-actions">
+      <button id="btnSaveLocal">Save to browser</button>
+      <button id="btnLoadLocal">Load from browser</button>
+      <button id="btnClearAll" class="danger">Clear</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="no-print panel">
+      <h2>1) Add donations</h2>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="manual">Manual entry</button>
+        <button class="tab" data-tab="import">CSV import</button>
+      </div>
+
+      <div class="tabpane" id="tab-manual">
+        <form id="donationForm" class="form">
+          <label>
+            Name*
+            <input id="fName" required placeholder="John Doe" />
+          </label>
+          <label>
+            Company
+            <input id="fCompany" placeholder="Acme Inc (optional)" />
+          </label>
+          <label>
+            Date*
+            <input id="fDate" required type="date" />
+          </label>
+          <label>
+            Donation Memo
+            <input id="fMemo" placeholder="Building Fund (optional)" />
+          </label>
+          <label>
+            Payment Method
+            <input id="fMethod" placeholder="Check / Credit Card / Zelle (optional)" />
+          </label>
+          <label>
+            Amount (USD)*
+            <input id="fAmount" required inputmode="decimal" placeholder="180.00" />
+          </label>
+
+          <button type="submit">Add donation</button>
+        </form>
+      </div>
+
+      <div class="tabpane hidden" id="tab-import">
+        <p class="muted">
+          Export your Google Sheet as CSV (File → Download → Comma-separated values).
+          Expected headers: Name, Company, Date, Donation Memo, Payment Method, Amount
+        </p>
+        <input id="csvFile" type="file" accept=".csv,text/csv" />
+        <div class="row">
+          <button id="btnImportCsv">Import CSV</button>
+          <button id="btnLoadSample">Load sample data</button>
+        </div>
+        <pre id="importStatus" class="status"></pre>
+      </div>
+
+      <hr />
+
+      <h2>2) Choose donor</h2>
+      <div class="row">
+        <input id="searchDonor" placeholder="Search donor…" />
+        <select id="donorSelect"></select>
+      </div>
+
+      <div class="row">
+        <button id="btnPrev">◀ Prev</button>
+        <button id="btnNext">Next ▶</button>
+        <button id="btnPrint" class="primary">Print / Save as PDF</button>
+      </div>
+
+      <div class="row">
+        <button id="btnDeleteDonor" class="danger">Delete this donor’s donations</button>
+      </div>
+    </section>
+
+    <section class="receipt">
+      <!-- This section is the printable receipt -->
+      <div id="receiptRoot" class="receipt-page">
+        <!-- Stationery header (replace with your HTML letterhead) -->
+        <div class="letterhead">
+          <div class="lh-left">
+            <div class="org-name" id="orgName">Your Org Name</div>
+            <div class="org-meta" id="orgMeta">123 Main St · City, ST · (555) 555-5555</div>
+            <div class="org-meta" id="orgEmail">email@example.org</div>
+          </div>
+          <div class="lh-right">
+            <div class="org-ein">EIN: <span id="orgEin">00-0000000</span></div>
+          </div>
+        </div>
+
+        <div class="receipt-body">
+          <div class="receipt-date">Date: <span id="rReceiptDate"></span></div>
+
+          <div class="to-block">
+            <div>To:</div>
+            <div id="rDonorName" class="donor-line"></div>
+            <div id="rDonorCompany" class="donor-line"></div>
+          </div>
+
+          <p>Dear <span id="rDonorFirst"></span>,</p>
+
+          <p>
+            Thank you for your generous support of <span id="rOrgNameInline"></span> during the 2025 calendar year.
+            Your partnership enables us to continue our mission and serve our community with strength, growth, and impact.
+          </p>
+
+          <p>
+            Below is a detailed record of your charitable contributions made in 2025. Please retain this receipt for your tax records.
+          </p>
+
+          <table class="donations-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Payment Method</th>
+                <th>Donation Memo</th>
+              </tr>
+            </thead>
+            <tbody id="rTableBody"></tbody>
+          </table>
+
+          <div class="total-line">
+            <strong>Total Contributions for 2025:</strong> <span id="rTotal"></span>
+          </div>
+
+          <p class="fineprint">
+            No goods or services were provided in exchange for these contributions.
+            <span id="rOrgNameInline2"></span> is a 501(c)(3) nonprofit organization.
+          </p>
+
+          <div class="signature">
+            <div>With sincere appreciation,</div>
+            <div class="sig-name" id="sigName">Signature Name</div>
+            <div class="sig-title" id="sigTitle">Signature Title</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
