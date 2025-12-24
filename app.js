@@ -17,6 +17,10 @@ let activeDonorIndex = 0;
 
 // ======== DOM ========
 const $ = (id) => document.getElementById(id);
+const setText = (id, value) => {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+};
 
 const tabs = document.querySelectorAll(".tab");
 tabs.forEach(btn => btn.addEventListener("click", () => {
@@ -29,17 +33,18 @@ tabs.forEach(btn => btn.addEventListener("click", () => {
 
 // Fill stationery/receipt static fields
 function renderOrg() {
-  $("orgName").textContent = ORG.name;
-  $("orgMeta").textContent = ORG.meta;
-  $("orgEmail").textContent = ORG.email;
-  $("orgEin").textContent = ORG.ein;
+  setText("orgName", ORG.name);
+  setText("orgMeta", ORG.meta);
+  setText("orgEmail", ORG.email);
+  setText("orgEin", ORG.ein);
 
-  $("rOrgNameInline").textContent = ORG.name;
-  $("rOrgNameInline2").textContent = ORG.name;
-  $("sigName").textContent = ORG.signatureName;
-  $("sigTitle").textContent = ORG.signatureTitle;
+  setText("rOrgNameInline", ORG.name);
+  setText("rOrgNameInline2", ORG.name);
 
-  $("rReceiptDate").textContent = formatDateLong(ORG.receiptDate);
+  setText("sigName", ORG.signatureName);
+  setText("sigTitle", ORG.signatureTitle);
+
+  setText("rReceiptDate", formatDateLong(ORG.receiptDate));
 }
 renderOrg();
 
