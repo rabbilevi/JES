@@ -148,3 +148,33 @@ button.danger { color: #b00020; }
   /* Avoid splitting table rows */
   tr, td, th { page-break-inside: avoid; }
 }
+/* ===== PRINT HEADER / FOOTER IMAGES ===== */
+
+.print-header,
+.print-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 5;
+}
+
+.print-header {
+  top: 0;
+}
+
+.print-footer {
+  bottom: 0;
+}
+
+.print-header img,
+.print-footer img {
+  width: 100%;
+  display: block;
+}
+
+/* Reserve space so content doesn't overlap */
+.receipt-page {
+  padding-top: 1.6in;   /* adjust to match header image height */
+  padding-bottom: 1.3in;/* adjust to match footer image height */
+}
